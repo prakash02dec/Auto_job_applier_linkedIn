@@ -69,11 +69,11 @@ def multi_sel_noWait(driver: WebDriver, texts: list, actions: ActionChains = Non
     '''
     - For each text in the `texts`, tries to find and click `span` element with that class.
     - If `actions` is provided, bot tries to search and Add the `text` to this filters list section.
-    - Won't wait to search for each element, assumes that element is rendered.
+    - Will wait up to 3 seconds for each element to be present before clicking.
     '''
     for text in texts:
         try:
-            button = driver.find_element(By.XPATH, './/span[normalize-space(.)="'+text+'"]')
+            button = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, './/span[normalize-space(.)="'+text+'"]')))
             scroll_to_view(driver, button)
             button.click()
             buffer(click_gap)
